@@ -1,0 +1,89 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:notesproject/viwes/login_viwe.dart';
+import 'package:notesproject/viwes/registration_viwe.dart';
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  if(kIsWeb){
+    await Firebase.initializeApp(options: const FirebaseOptions(
+        apiKey: "AIzaSyD2D7uYMP3HzQlqPDq1dZit24I6QnFIgLs",
+        authDomain: "notesproject-1ee1f.firebaseapp.com",
+        projectId: "notesproject-1ee1f",
+        storageBucket: "notesproject-1ee1f.appspot.com",
+        messagingSenderId: "758333746103",
+        appId: "1:758333746103:web:cf3376351c0463a02fd632"
+    ));
+  }else{
+    await Firebase.initializeApp();
+  }
+
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const Home(),
+      routes: {
+        "/login": (context)=> const LoginViwe(),
+        "/registrion": (context)=> const Registrion(),
+      },
+    );
+  }
+}
+class Home extends StatelessWidget {
+  const Home({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: FutureBuilder<FirebaseApp>(
+          future: Firebase.initializeApp(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Text('Error initializing Firebase');
+            }
+
+            // Once complete, show your application
+            if (snapshot.connectionState == ConnectionState.done) {
+              // final user = FirebaseAuth.instance.currentUser;
+              // if(user?.emailVerified ?? false){
+              //   print(">>>You are a verified user");
+              // }else{
+              //   print(">>>You are a not verified user");
+              // }
+              // print(user);
+              // return const Text("done");
+              return const LoginViwe();
+            }
+
+            // Otherwise, show something whilst waiting for initialization to complete
+            return const CircularProgressIndicator();
+          },
+
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+
+

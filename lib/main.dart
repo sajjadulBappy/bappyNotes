@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:notesproject/viwes/login_viwe.dart';
 import 'package:notesproject/viwes/registration_viwe.dart';
+import 'package:notesproject/viwes/verify_email.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/login": (context)=> const LoginViwe(),
         "/registrion": (context)=> const Registrion(),
+        "/verify-email": (context)=> const VerifyEmail(),
       },
     );
   }
@@ -60,15 +62,19 @@ class Home extends StatelessWidget {
 
             // Once complete, show your application
             if (snapshot.connectionState == ConnectionState.done) {
-              // final user = FirebaseAuth.instance.currentUser;
-              // if(user?.emailVerified ?? false){
-              //   print(">>>You are a verified user");
-              // }else{
-              //   print(">>>You are a not verified user");
-              // }
-              // print(user);
-              // return const Text("done");
-              return const LoginViwe();
+              final user = FirebaseAuth.instance.currentUser;
+
+              if(user != null){
+                if(user.emailVerified ?? false){
+                  print(">>>You are a verified user");
+                }else{
+                  return const VerifyEmail();
+                }
+              }else{
+                return const LoginViwe();
+              }
+
+              return const Text("done");
             }
 
             // Otherwise, show something whilst waiting for initialization to complete

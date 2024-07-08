@@ -90,6 +90,12 @@ class _LoginViweState extends State<LoginViwe> {
                   },
                   child: const Text("Not register get? Register hear")
               ),
+              TextButton(
+                  onPressed: (){
+                    Navigator.of(context).pushNamedAndRemoveUntil('/verify-email', (Route route) => false);
+                  },
+                  child: const Text("Verify email")
+              ),
             ],
           ),
         ),
